@@ -1,147 +1,185 @@
 # Lab Worksheet 1: MNIST Edge and Cloud Inference
 
-**Course:** Machine Learning on the Edge  
-**Student:** Senthil Kumar M R  
-**Student ID:** 2025cs05049  
-**Experiment run date:** 22 September 2026
+**Course:** Machine Learning on the Edge · **Student:** Senthil Kumar M R · **Student ID:** 2025cs05049 · **Experiment date:** 22 September 2026
 
 ## Aim
 
-This experiment compares a TensorFlow Lite model running locally with the same model called through a FastAPI service. The comparison looks at accuracy, model size, latency, bandwidth, and what happens when the server is unavailable.
+In this experiment, I trained a small model to recognise handwritten digits. I then compared its prediction time when it ran on my computer with the time taken when the same model was called through a web service. I also recorded the model sizes and the amount of data sent to the service.
 
-## Setup and method
+## Simple meaning of a few terms
 
-The supplied Python programs were run in this order: train the MNIST model, convert it to TensorFlow Lite, benchmark local inference, start the API server and benchmark its client, then run the combined comparison. The cloud-style server and client ran on the same computer using `localhost`; this is a REST benchmark, not a measurement of a remote cloud connection.
+- **Model:** A program that learns patterns from examples and uses them to make a prediction.
+- **Training:** Showing the model many labelled examples so it can learn those patterns.
+- **Inference:** Asking a trained model to make a prediction for new input.
+- **Latency:** The time taken to return one prediction.
+- **Throughput:** The number of predictions that can be made in one second.
+- **Speedup:** How many times one method is faster than another in the measured test.
+- **Edge inference:** Running the model on the device that collects or uses the data.
+- **Cloud inference:** Sending data to a server and getting the prediction back.
 
-The run used a MacBook Pro (Mac15,7) with an Apple M3 Pro processor and 18 GB of memory. The environment reported Python 3.13.5, TensorFlow 2.21.0, Keras 3.14.1, and FastAPI 0.136.1. The local timing uses the laptop CPU with the XNNPACK delegate, so it represents a laptop simulation of edge inference rather than a microcontroller benchmark.
+## Setup and steps
+
+I used the MNIST dataset, which contains pictures of handwritten digits from 0 to 9. The program trained a small convolutional neural network (CNN), a type of model that can find simple shapes and lines in an image. I converted it to TensorFlow Lite and tested it on one saved image. The same image was then sent to a FastAPI web service for the cloud-style test.
+
+The source files in the package have clear names. They follow the same steps as the worksheet programs:
+
+1. `tensorflow_model_builder.py` trains the model and saves a test image.
+2. `tflite_model_converter.py` converts the trained model to TensorFlow Lite.
+3. `local_inference_benchmarker.py` measures predictions on this computer.
+4. `cloud_inference_server.py` starts the web service; `cloud_inference_client.py` sends the image to it.
+5. `edge_cloud_results_comparator.py` runs the local and server tests and compares them.
+
+The saved terminal logs and measurements are from the original worksheet run, so they still show the worksheet's original file names. I cleaned up the source names and variable names after that run. I did not repeat the full timing test after the clean-up. I did check that the updated server accepts a valid image and rejects pixel values outside the expected range.
+
+The server and client ran on the same MacBook using `localhost` (this computer). So this is a local web-service test, not a test over the internet or to a real cloud server.
+
+| Computer or software | Used in this experiment |
+|---|---|
+| Computer | MacBook Pro, Mac15,7 |
+| Processor and memory | Apple M3 Pro, 18 GB |
+| Python | 3.13.5 |
+| TensorFlow / Keras | 2.21.0 / 3.14.1 |
+| FastAPI | 0.136.1 |
+| Local inference support | XNNPACK, a helper for running predictions on the CPU |
 
 ## Model training
 
-The model was trained for five epochs on 60,000 MNIST training images and evaluated on 10,000 test images. It used Adam, sparse categorical cross-entropy, batch size 64, and a 10% validation split.
+The model learned from 60,000 images and was checked using 10,000 separate test images. Training ran for five epochs (five rounds over the training examples). I used a batch size of 64 and kept 10% of the training images for checking progress during training. Accuracy is the percentage of images classified correctly. The loss value shows how far the model's answers were from the correct answers; a lower loss is better. Parameters are the values the model adjusts while learning.
 
-| Layer | Output shape | Parameters |
-|---|---:|---:|
-| Conv2D, 8 filters, 3×3, ReLU | 28×28×8 | 80 |
-| Max pooling, 2×2 | 14×14×8 | 0 |
-| Flatten | 1,568 | 0 |
-| Dense, 32 units, ReLU | 32 | 50,208 |
-| Dense, 10 units, softmax | 10 | 330 |
-| **Total** | — | **50,618** |
+| Model layer | What it does | Number of parameters |
+|---|---|---:|
+| Convolution, 8 filters, 3×3, ReLU | Finds small lines and shapes in the digit image | 80 |
+| 2×2 max pooling | Shrinks the image features while keeping important details | 0 |
+| Flatten | Changes the image features into one long list | 0 |
+| Dense, 32 units, ReLU | Combines features to help identify the digit | 50,208 |
+| Dense, 10 units, softmax | Gives a score for each digit from 0 to 9 | 330 |
+| **Total** |  | **50,618** |
 
-| Training result | Value |
+| Training check | Result |
 |---|---:|
-| Final training accuracy | 97.90% |
-| Final training loss | 0.0688 |
-| Final validation accuracy | 98.27% |
-| Final validation loss | 0.0631 |
-| Test accuracy | **97.85%** |
+| Accuracy on training images at the end | 97.90% |
+| Accuracy on validation images | 98.27% |
+| Accuracy on the separate test set | **97.85%** |
+| Training loss | 0.0688 |
+| Validation loss | 0.0631 |
 
-The test result is close to the final training accuracy, so this run does not show a large train/test gap. The supplied training program does not set a random seed; a later training run may produce slightly different values. The benchmark image was test sample 0, whose true label was 7.
+The model correctly classified most test images. The test accuracy is close to the training accuracy, so this run does not show a large difference between the images used for learning and the separate test images. The training program does not fix a random seed, so training again can give slightly different results. The saved example image was the first test image. Its correct label was 7.
 
-## TensorFlow Lite conversion
+## Converting the model to TensorFlow Lite
 
-The converter used `Optimize.DEFAULT`, which applies dynamic-range weight optimization. The inspected model interface still takes and returns `float32`; it is not a fully integer-only input/output model. The larger dense weight matrix was stored in INT8 form.
+TensorFlow Lite is a model format used for running models on phones and other smaller devices. I used `Optimize.DEFAULT`. This option reduces the size of some model weights. The weights are stored numbers that the model learned during training.
 
-| Artifact | Size |
+The converted model still accepts and returns `float32` values, so it is not a fully integer model. A `float32` value uses 32 bits to store a number. Some of the larger weights were stored using INT8, which uses 8 bits and takes less space.
+
+| File or folder | Size |
 |---|---:|
-| Saved Keras training model (`mnist_model.keras`) | 637,507 bytes (622.6 KiB) |
-| Exported inference SavedModel directory | 452,678 bytes (442.1 KiB) |
-| TensorFlow Lite model (`model.tflite`) | 55,960 bytes (54.6 KiB) |
+| Trained Keras model, `mnist_model.keras` | 637,507 bytes (622.6 KiB) |
+| Exported inference SavedModel folder | 452,678 bytes (442.1 KiB) |
+| TensorFlow Lite model, `model.tflite` | 55,960 bytes (54.6 KiB) |
 
-The supplied script saves a `.keras` file even though its console text calls it a SavedModel. I also exported the trained model to a SavedModel directory, without retraining, to measure the directory requested in the worksheet. Using that directory, the SavedModel/TFLite ratio is `452,678 ÷ 55,960 = 8.09×`, a size reduction of 87.64%. The supplied conversion script separately reports the Keras/TFLite ratio as 11.4×.
+The worksheet asks for the size of a SavedModel folder. The training program saves a `.keras` file, so I also exported that same trained model to a SavedModel folder. I did not train the model again for this export.
 
-## Local inference
+The SavedModel folder is about **8.09 times** the size of the TensorFlow Lite file. In other words, the TensorFlow Lite file is about **87.64% smaller** than that folder. The original conversion script also compares the Keras file with the TensorFlow Lite file; that ratio is 11.4 times. These are two different comparisons, so their ratios are not the same.
 
-The TFLite interpreter performed one warm-up call, then timed 100 inferences on the saved test image. The warm-up was excluded.
+## Local inference on this computer
 
-| Result | Value |
+The local program loaded the TensorFlow Lite model, made one warm-up prediction, and then measured 100 predictions using the saved image. The warm-up was not included in the results.
+
+| Result | Measured value |
 |---|---:|
-| True label | 7 |
-| Predicted label | 7 |
-| Confidence | 0.9996 |
-| Mean latency | 0.006 ms |
-| Median latency | 0.006 ms |
-| 95th-percentile latency | 0.007 ms |
-| Maximum latency | 0.009 ms |
-| Throughput reported by script | 161,335 inferences/s |
+| Correct digit | 7 |
+| Predicted digit | 7 |
+| Confidence score | 0.9996 |
+| Average time for one prediction | 0.006 ms |
+| Middle value (median) | 0.006 ms |
+| 95th-percentile time | 0.007 ms |
+| Longest time in this test | 0.009 ms |
+| Throughput shown by the program | 161,335 predictions per second |
 
-The model predicted the saved image correctly. The timing values are close together in this 100-run sample. This local path does not send the image over HTTP. The measured time covers interpreter invocation, not image capture or all application work.
+The model predicted the saved image correctly. Its confidence score is close to 1, which means it was very sure about this prediction. The mean is the average time over all 100 predictions. The 95th percentile means that 95 out of the 100 measured times were at or below that value. These times cover model prediction only; they do not include taking a photo, preparing the image, or showing the result on a screen.
 
-## Cloud-style inference
+This test ran on a powerful laptop, not on a small device such as a microcontroller. So these times show how the model runs on this laptop; they should not be treated as expected times for every edge device.
 
-The FastAPI server loaded the same TFLite model. The client sent the same saved image in 100 sequential HTTP requests. The supplied code uses the `/infer` endpoint, although the course announcement refers to `/predict`.
+## Cloud-style inference using the local server
 
-| Result | Value |
+The server loaded the same TensorFlow Lite model. The client sent the same image as 784 numbers in a JSON request (a text format for sending data). It first sent one warm-up request and then measured 100 requests. The submitted code uses the `/infer` address. The course announcement mentions `/predict`, but the supplied worksheet programs use `/infer`.
+
+| Result | Measured value |
 |---|---:|
-| Prediction | 7 |
-| Mean server inference time | 0.012 ms |
+| Predicted digit | 7 |
+| Average time spent by the model on the server | 0.012 ms |
 | Server 95th-percentile time | 0.016 ms |
-| Mean client round-trip time | 1.646 ms |
-| Client round-trip 95th percentile | 2.006 ms |
-| Mean round-trip time outside measured inference | 1.634 ms |
-| Serialized JSON request body | 5,687 bytes |
-| Request-body rate at 30 FPS | 166.6 KiB/s (about 167 KB/s as printed) |
+| Average time for the full request and response | 1.646 ms |
+| 95th-percentile full request time | 2.006 ms |
+| Average time outside the model prediction | 1.634 ms |
+| JSON request body size | 5,687 bytes |
+| Request data rate at 30 images per second | 166.6 KiB/s (about 167 KB/s) |
 
-Most of the measured localhost round trip was outside the model's inference call. This includes JSON handling, HTTP/API processing, local transfer, scheduling, and response parsing. The 5,687-byte figure is the request body only; it excludes the response, HTTP headers, and network transport overhead. Because the client and server shared one computer, these numbers do not represent internet latency.
+The server's model calculation took only a small part of the full request time. The rest included preparing the JSON, handling the web request, sending it over the computer's local connection, and reading the response. The 5,687-byte size is only the request body. It does not include the response or internet transport information. As the server and client were on the same computer, these results do not show internet or remote-cloud delay.
 
-## Combined comparison
+## Combined edge and cloud comparison
 
-| Measurement | Value | Network dependency | Note |
+The comparison program measured local inference and the full request to the server in another run. The results below are copied from that run.
+
+| Measurement | Value | Needs a network? | What it means |
 |---|---:|---|---|
-| Local TFLite mean latency | 0.007 ms | No | Local interpreter compute |
-| Server compute mean | 0.012 ms | Server | Reported in the JSON response |
-| Cloud-style mean round trip | 1.502 ms | Yes | Localhost HTTP request and response |
-| Edge advantage from displayed means | 1.495 ms | — | RTT minus local mean |
-| Speedup reported by supplied script | 226.8× | — | Uses the run's unrounded timing arrays |
-| JSON request body per call | 5,687 bytes | — | Request body only |
-| Edge and server predictions match | Yes | — | Both predicted digit 7 |
+| Average local prediction time | 0.007 ms | No | Model runs on this computer |
+| Average server model time | 0.012 ms | Server connection | Time spent on the server's model calculation |
+| Average full server request time | 1.502 ms | Yes | Sending the request and receiving its answer over localhost |
+| Difference between full server time and local time | 1.495 ms | — | Extra time in this comparison run |
+| Speedup printed by the comparison program | 226.8× | — | Uses more exact times than the rounded values shown above |
+| Throughput in the combined run | 151,001 predictions/s | 666 requests/s | Calculated from average latency |
+| JSON request body per image | 5,687 bytes | — | Text data sent for one request, before network overhead |
+| Do local and server predictions match? | Yes | — | Both predicted digit 7 |
 
-The combined run found lower latency on the local path. A supplementary run retained the unrounded timing samples and measured 0.006678269 ms mean edge time and 1.430055039 ms mean round-trip time, a 214.135581× ratio. The timing changed slightly between runs, which is expected for short measurements on a shared operating system.
+The comparison run and the separate cloud run gave different average times because they were measured at different times on a shared computer. Short measurements can change slightly due to other work happening on the computer. A supplementary timing check retained the exact timing samples and gave an edge time of 0.006678 ms and a round-trip time of 1.430055 ms, or about 214.14 times faster for edge inference in that run.
+
+The main result is that local prediction was faster in these tests and did not need to send the image to a server. The cloud-style test still ran on this same laptop, so the results cannot tell us how fast a real remote cloud service would be.
 
 ## Reflection questions
 
-### R1 — Latency and real-time constraints
+### R1 — Latency and real-time use
 
-At 600 parts per minute, each part arrives every 100 ms. Both the measured local mean (0.007 ms) and the localhost round trip (1.502 ms) are below that interval. The comparison does not show how a remote cloud service would perform because no WAN connection was measured. For a vehicle with a 10 ms pedestrian-detection deadline, a remote round trip can be unpredictable, so the time-critical decision should run on the vehicle; cloud processing can support non-critical analysis or updates.
+At 600 parts per minute, one part arrives every 100 milliseconds. The measured local time (0.007 ms) and the full request time to the local server (1.502 ms) are both below 100 ms. However, the server test used `localhost`, so it does not include real internet delay. For a vehicle that must react within 10 milliseconds to avoid a person, it is safer to make the urgent decision inside the vehicle. The cloud can still help with work that is not urgent, such as later analysis or model updates.
 
-### R2 — Privacy and data sovereignty
+### R2 — Privacy and data protection
 
-In the cloud test, the image values leave the client as a JSON request. Similar data exposure can arise in patient monitoring (HIPAA), home cameras or voice assistants (GDPR Article 25), and workplace or retail biometric monitoring (PDPA). If inference runs on the device, raw images, audio, or sensor values can stay there and only a minimal result can be sent onward. This reduces the raw-data transfer and storage path, though it does not remove every privacy or security obligation.
+In the server test, the image values were sent from the client to the server as JSON. In an actual application, images, voice recordings, or sensor readings can contain private information. Running the model on the device can keep the original data on that device and send only a short result, if needed. This can reduce the amount of private data being shared, but the application still needs proper security and data protection.
 
-### R3 — Bandwidth economics
+### R3 — Data use and bandwidth
 
-Using the question's assumptions of 500 cameras, 25 frames per second, and 50 KB per frame:
+Using the question's example of 500 cameras, 25 images per second from each camera, and 50 KB per image:
 
 ```text
-Cloud video: 500 × 25 × 50 KB = 625,000 KB/s = 625 MB/s (about 5 Gbit/s)
-Edge labels: 500 × 25 × 1 byte = 12,500 bytes/s = 12.5 KB/s
-Difference: approximately 624.99 MB/s less uplink traffic
+Sending every image: 500 × 25 × 50 KB = 625,000 KB/s, or about 625 MB/s
+Sending one-byte labels: 500 × 25 × 1 byte = 12,500 bytes/s, or about 12.5 KB/s
 ```
 
-This assumes every keyframe is transmitted and each edge result is one byte. The reduction would lower network and cloud-ingress requirements. A system might still send selected clips for review, but it would not need to stream every frame just to get a label.
+In this example, sending only one-byte labels would reduce the amount of data sent by about 624.99 MB every second. This could reduce the network capacity and cloud storage needed. A system may still send selected images for review, but it would not have to send every image just to get a prediction. This calculation assumes each result is one byte and does not include network overhead.
 
-### R4 — Connectivity and resilience
+### R4 — What happens when the connection is lost?
 
-When the server was stopped, the client reported that the server must be started first. The local inference script still loaded the TFLite model and predicted 7. This shows the cloud path depends on the server and network path, while the local model can keep working without that service, as long as the device itself is available. Examples where offline decisions matter include robot or vehicle collision stopping, remote industrial or agricultural sites, and emergency-response equipment.
+When the server was stopped, the recorded client run could not connect and asked for the server to be started. The local program still loaded the model and predicted digit 7. This shows that local prediction can continue without the server, as long as the device itself is working. This is useful for robots, vehicles, farms, factories, and emergency equipment where a network may be slow or unavailable.
 
-### R5 — Edge–cloud continuum
+### R5 — Choosing where to run the model
 
-| Scenario | Suggested tier | Main constraint | Reason |
-|---|---|---|---|
-| Always-on keyword spotting | Edge | Privacy | Audio can be processed locally and responses are immediate. |
-| Monthly patient-outcome analysis | Private cloud | Privacy | Batch work is not latency-sensitive; access and data handling need controls. |
-| Robot-arm collision avoidance | Edge | Latency | The safety decision belongs in the local control loop. |
-| Payment-terminal fraud checks | Fog, with local fallback | Connectivity | A nearby service can use broader context while the terminal can handle temporary disconnection. |
+| Example | Suggested place to run it | Main reason |
+|---|---|---|
+| Always-on keyword detection | On the device (edge) | Voice can stay on the device and the response is quick. |
+| Monthly analysis of patient results | Private cloud | It can process many records together and does not need an instant answer. |
+| Robot arm collision warning | On the robot (edge) | The robot must react immediately. |
+| Payment fraud check | Nearby server with local backup | A nearby server can check more information; local backup helps if the connection drops. |
 
 ## Limitations
 
-- The cloud-style test used `localhost`, not a remote cloud provider.
-- The local benchmark used a high-performance laptop rather than a low-power edge board.
-- The timing comparison used one saved image and 100 sequential runs.
-- The JSON size excludes response and transport overhead.
-- The training script does not fix a random seed.
-- The TFLite model was not evaluated over the full 10,000-image test set in this run.
+- The server and client ran on the same laptop, not on a real cloud service.
+- The local test used a high-performance laptop, not a low-power edge device.
+- The timing test used one image and 100 measured runs.
+- The request size does not include the response or network overhead.
+- The training program does not fix a random seed, so a new training run may give slightly different results.
+- This run did not measure accuracy across all 10,000 test images using the converted TensorFlow Lite model.
+- The full benchmark was not repeated after the source files were renamed and cleaned up; the reported timing values are from the saved run logs.
 
 ## Supporting files
 
-The accompanying package includes the six supplied Python programs, the trained Keras and TFLite models, the saved benchmark sample, the supplemental SavedModel export used for the size row, a JSON result summary, and the captured terminal logs. The logs are raw terminal captures and may show progress-control characters. They support the values reported above.
+The package includes the trained Keras model, the TensorFlow Lite model, the exported SavedModel folder, the saved test image, a results file, and the original run logs. The logs may contain control characters from the terminal's progress display. They have been kept as captured and support the values in this report.
