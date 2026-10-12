@@ -1,0 +1,22 @@
+^D/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+Input shape  : [ 1 28 28  1]
+Output shape : [ 1 10]
+
+==================================================
+  EDGE INFERENCE RESULTS
+==================================================
+  Predicted class  : 7
+  Confidence       : 0.9996
+  Mean latency     : 0.006 ms
+  Median latency   : 0.006 ms
+  p95 latency      : 0.007 ms
+  Max latency      : 0.009 ms
+  Throughput       : 161335 inferences/sec
+==================================================
+  RECORD THESE VALUES IN YOUR RESULTS TABLE

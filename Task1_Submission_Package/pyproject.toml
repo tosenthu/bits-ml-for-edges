@@ -1,0 +1,7 @@
+[project]
+name = "task1-submission-package"
+version = "0.1.0"
+requires-python = ">=3.8"
+dependencies = [
+    "tensorflow>=2.13.1",
+]

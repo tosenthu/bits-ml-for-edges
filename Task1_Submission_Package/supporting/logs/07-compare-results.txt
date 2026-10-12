@@ -1,0 +1,24 @@
+^D/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+
+=================================================================
+  METRIC                                   EDGE        CLOUD RTT
+=================================================================
+  Mean latency (ms)                       0.007            1.502
+  Median (ms)                             0.007            1.519
+  p95 latency (ms)                        0.007            1.767
+  Throughput (inf/s)                     151001              666
+  Data sent per call                    0 bytes         5,687 B
+  Network required                           No              Yes
+  Prediction                                  7                7
+=================================================================
+
+  Edge speedup             : 226.8x faster than cloud RTT
+  Bandwidth per inference  : 5,687 bytes  (5.6 KB)
+  At 30 FPS bandwidth need : 167 KB/s  (0.16 MB/s)
+=================================================================

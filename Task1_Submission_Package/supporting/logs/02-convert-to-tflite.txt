@@ -1,0 +1,19 @@
+^DLoaded model from  mnist_model/
+Saved artifact at '/var/folders/pq/yr2sf2950c72hhwx588w71hm0000gn/T/tmpkmq6a0d1'. The following endpoints are available:
+
+* Endpoint 'serve'
+  args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 28, 28, 1), dtype=tf.float32, name='input_layer')
+Output Type:
+  TensorSpec(shape=(None, 10), dtype=tf.float32, name=None)
+Captures:
+  4782405968: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4782405584: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4800116880: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4800117648: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4800117456: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4800115920: TensorSpec(shape=(), dtype=tf.resource, name=None)
+
+✔ Conversion complete!
+   SavedModel size  : 622.6 KB
+   TFLite size      : 54.6 KB
+   Compression      : 11.4×

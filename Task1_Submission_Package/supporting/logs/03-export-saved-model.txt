@@ -1,0 +1,15 @@
+^DSaved artifact at 'mnist_saved_model'. The following endpoints are available:
+
+* Endpoint 'serve'
+  args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 28, 28, 1), dtype=tf.float32, name='input_layer')
+Output Type:
+  TensorSpec(shape=(None, 10), dtype=tf.float32, name=None)
+Captures:
+  4811356688: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4811356304: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4829198672: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4829199440: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4829199248: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4829197712: TensorSpec(shape=(), dtype=tf.resource, name=None)
+SavedModel directory: mnist_saved_model
+SavedModel logical size: 452,678 bytes (442.1 KB)

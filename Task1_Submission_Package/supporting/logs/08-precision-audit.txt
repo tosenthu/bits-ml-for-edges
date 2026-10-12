@@ -1,0 +1,30 @@
+^D/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+    
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+{
+  "edge_mean_ms": 0.006678269128315151,
+  "edge_median_ms": 0.006624963134527206,
+  "edge_p95_ms": 0.006889621727168559,
+  "edge_max_ms": 0.008917006198316813,
+  "edge_throughput_per_second": 149739.39815634358,
+  "server_mean_ms": 0.008610000000000001,
+  "server_p95_ms": 0.012,
+  "cloud_rtt_mean_ms": 1.4300550386542454,
+  "cloud_rtt_median_ms": 1.4186040207277983,
+  "cloud_rtt_p95_ms": 1.6972711484413594,
+  "cloud_rtt_max_ms": 1.966875046491623,
+  "cloud_throughput_per_second": 699.2737852530843,
+  "edge_advantage_ms": 1.4233767695259303,
+  "edge_speedup_factor": 214.13558081853338,
+  "mean_non_inference_overhead_ms": 1.4214450386542454,
+  "payload_bytes": 5687,
+  "bandwidth_30_fps_kib_per_second": 166.611328125,
+  "edge_prediction": 7,
+  "cloud_prediction": 7,
+  "predictions_match": true
+}
+Raw samples written to precision-comparison-samples.json
