@@ -21,7 +21,7 @@ uv venv .venv
 uv pip install --python .venv/bin/python -r requirements.txt
 ```
 
-The MNIST dataset is included in `supporting/data/mnist.npz`, so training does not need to download data or depend on the computer's SSL certificate setup. Internet access is needed only to install packages that are not already available.
+The training script downloads MNIST from TensorFlow/Keras when needed. It uses the trusted certificate bundle provided by `certifi`, so SSL verification stays enabled and does not depend on a manual certificate-install step. An internet connection is needed for this first dataset download and for installing packages that are not already available.
 
 ## Train and run local inference
 

@@ -2,7 +2,7 @@
 
 Run these commands from this folder. They create the model files and test image here.
 
-The MNIST dataset is included in `../supporting/data/mnist.npz`. The training script reads this local file, so it does not need to download MNIST or rely on local SSL certificates.
+The training script downloads MNIST from TensorFlow/Keras when needed and uses the `certifi` trusted-certificate bundle for HTTPS verification. The first run therefore needs an internet connection, but it does not need a manual certificate-install step.
 
 ```bash
 python tensorflow_model_builder.py
