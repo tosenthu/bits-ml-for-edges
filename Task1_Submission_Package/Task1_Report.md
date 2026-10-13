@@ -21,6 +21,8 @@ In this experiment, I trained a small model to recognise handwritten digits. I t
 
 I used the MNIST dataset, which contains pictures of handwritten digits from 0 to 9. The program trained a small convolutional neural network (CNN), a type of model that can find simple shapes and lines in an image. I converted it to TensorFlow Lite and tested it on one saved image. The same image was then sent to a FastAPI web service for the cloud-style test.
 
+I used the standard MNIST dataset provided through TensorFlow/Keras. A copy of this dataset is included at `supporting/data/mnist.npz`, so the training can be repeated without downloading the data or relying on the computer's SSL certificates. It contains 60,000 training images and 10,000 test images.
+
 The source files in the package have clear names. They follow the same steps as the worksheet programs:
 
 1. `tensorflow_model_builder.py` trains the model and saves a test image.

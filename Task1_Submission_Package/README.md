@@ -21,7 +21,7 @@ uv venv .venv
 uv pip install --python .venv/bin/python -r requirements.txt
 ```
 
-The first training run needs an internet connection to download the MNIST dataset.
+The MNIST dataset is included in `supporting/data/mnist.npz`, so training does not need to download data or depend on the computer's SSL certificate setup. Internet access is needed only to install packages that are not already available.
 
 ## Train and run local inference
 

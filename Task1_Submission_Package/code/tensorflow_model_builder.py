@@ -6,14 +6,27 @@ import tensorflow as tf
 
 TRAINING_EPOCHS = 5
 TRAINING_BATCH_SIZE = 64
+MNIST_DATASET_PATH = (
+    Path(__file__).resolve().parent.parent / "supporting" / "data" / "mnist.npz"
+)
 MODEL_PATH = Path("mnist_model.keras")
 TEST_SAMPLE_PATH = Path("test_sample.npy")
 
 
 def main() -> None:
-    (training_images, training_labels), (test_images, test_labels) = (
-        tf.keras.datasets.mnist.load_data()
-    )
+    if not MNIST_DATASET_PATH.is_file():
+        raise FileNotFoundError(
+            f"MNIST data file not found: {MNIST_DATASET_PATH}. "
+            "Extract the full submission package, including supporting/data/mnist.npz."
+        )
+
+    with np.load(MNIST_DATASET_PATH) as mnist_dataset:
+        training_images = mnist_dataset["x_train"]
+        training_labels = mnist_dataset["y_train"]
+        test_images = mnist_dataset["x_test"]
+        test_labels = mnist_dataset["y_test"]
+
+    print(f"Loaded MNIST data from {MNIST_DATASET_PATH}")
 
     training_images = training_images.reshape(-1, 28, 28, 1).astype(np.float32) / 255.0
     test_images = test_images.reshape(-1, 28, 28, 1).astype(np.float32) / 255.0

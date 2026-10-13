@@ -2,6 +2,8 @@
 
 Run these commands from this folder. They create the model files and test image here.
 
+The MNIST dataset is included in `../supporting/data/mnist.npz`. The training script reads this local file, so it does not need to download MNIST or rely on local SSL certificates.
+
 ```bash
 python tensorflow_model_builder.py
 python tflite_model_converter.py
