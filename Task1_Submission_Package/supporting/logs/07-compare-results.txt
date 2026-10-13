@@ -1,24 +1,27 @@
-^D/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+/Users/smanguzh/.matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /var/folders/pq/yr2sf2950c72hhwx588w71hm0000gn/T/matplotlib-evccy_0b because there was an issue with the default path (/Users/smanguzh/.matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Matplotlib is building the font cache; this may take a moment.
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
     TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
     See the [migration guide](https://ai.google.dev/edge/litert/migration)
     for details.
-    
+
   warnings.warn(_INTERPRETER_DELETION_WARNING)
 INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
 
 =================================================================
-  METRIC                                   EDGE        CLOUD RTT
+METRIC                                   EDGE        CLOUD RTT
 =================================================================
-  Mean latency (ms)                       0.007            1.502
-  Median (ms)                             0.007            1.519
-  p95 latency (ms)                        0.007            1.767
-  Throughput (inf/s)                     151001              666
-  Data sent per call                    0 bytes         5,687 B
-  Network required                           No              Yes
-  Prediction                                  7                7
+Mean latency (ms)                       0.007            1.510
+Median latency (ms)                     0.007            1.494
+p95 latency (ms)                        0.007            1.814
+Throughput (inf/s)                     151957              662
+Data sent per call                    0 bytes         5,687 B
+Network required                           No              Yes
+Prediction                                  7                7
 =================================================================
 
-  Edge speedup             : 226.8x faster than cloud RTT
-  Bandwidth per inference  : 5,687 bytes  (5.6 KB)
-  At 30 FPS bandwidth need : 167 KB/s  (0.16 MB/s)
+Edge speedup: 229.5x compared with cloud RTT
+Request body per inference: 5,687 bytes (5.6 KB)
+Request bandwidth at 30 FPS: 167 KB/s (0.16 MB/s)
 =================================================================

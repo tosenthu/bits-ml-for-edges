@@ -1,9 +1,13 @@
+/Users/smanguzh/.matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /var/folders/pq/yr2sf2950c72hhwx588w71hm0000gn/T/matplotlib-wo1djm1_ because there was an issue with the default path (/Users/smanguzh/.matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Matplotlib is building the font cache; this may take a moment.
 /Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
     TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
     See the [migration guide](https://ai.google.dev/edge/litert/migration)
     for details.
-    
+
   warnings.warn(_INTERPRETER_DELETION_WARNING)
 INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
-✔ Model ready on port 8000
-^C
+/Users/smanguzh/Documents/Codex/2026-09-22/need-to-submit-an-assignment-for-2/bits-ml-for-edges/Task1_Submission_Package/code/cloud_inference_server.py:27: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+  @validator("data")
+Model is ready on 127.0.0.1:8000

@@ -1,26 +1,29 @@
-^D/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+/Users/smanguzh/.matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /var/folders/pq/yr2sf2950c72hhwx588w71hm0000gn/T/matplotlib-alk22_b4 because there was an issue with the default path (/Users/smanguzh/.matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Matplotlib is building the font cache; this may take a moment.
+/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/tensorflow/lite/python/interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
     TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
     See the [migration guide](https://ai.google.dev/edge/litert/migration)
     for details.
-    
+
   warnings.warn(_INTERPRETER_DELETION_WARNING)
 INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
 {
-  "edge_mean_ms": 0.006678269128315151,
-  "edge_median_ms": 0.006624963134527206,
-  "edge_p95_ms": 0.006889621727168559,
-  "edge_max_ms": 0.008917006198316813,
-  "edge_throughput_per_second": 149739.39815634358,
-  "server_mean_ms": 0.008610000000000001,
-  "server_p95_ms": 0.012,
-  "cloud_rtt_mean_ms": 1.4300550386542454,
-  "cloud_rtt_median_ms": 1.4186040207277983,
-  "cloud_rtt_p95_ms": 1.6972711484413594,
-  "cloud_rtt_max_ms": 1.966875046491623,
-  "cloud_throughput_per_second": 699.2737852530843,
-  "edge_advantage_ms": 1.4233767695259303,
-  "edge_speedup_factor": 214.13558081853338,
-  "mean_non_inference_overhead_ms": 1.4214450386542454,
+  "edge_mean_ms": 0.006028315983712673,
+  "edge_median_ms": 0.005875015631318092,
+  "edge_p95_ms": 0.007287500193342565,
+  "edge_max_ms": 0.00829098280519247,
+  "edge_throughput_per_second": 165883.806141185,
+  "server_mean_ms": 0.009510000000000001,
+  "server_p95_ms": 0.014,
+  "cloud_rtt_mean_ms": 1.420753716956824,
+  "cloud_rtt_median_ms": 1.3956665061414242,
+  "cloud_rtt_p95_ms": 1.6548558487556875,
+  "cloud_rtt_max_ms": 2.254583057947457,
+  "cloud_throughput_per_second": 703.8517570391755,
+  "edge_advantage_ms": 1.4147254009731114,
+  "edge_speedup_factor": 235.6800341580338,
+  "mean_non_inference_overhead_ms": 1.4112437169568242,
   "payload_bytes": 5687,
   "bandwidth_30_fps_kib_per_second": 166.611328125,
   "edge_prediction": 7,

@@ -1,16 +1,16 @@
-^DPayload size   : 5,687 bytes  (5.6 KB)
-Server reachable ✔
+Request body size: 5,687 bytes (5.6 KB)
+Server reachable
 
 ==================================================
-  CLOUD INFERENCE RESULTS
+CLOUD INFERENCE RESULTS
 ==================================================
-  Prediction       : 7
-  Server mean ms   : 0.012
-  Server p95 ms    : 0.016
-  RTT mean ms      : 1.646
-  RTT p95 ms       : 2.006
-  Net overhead ms  : 1.634  (serialise+transfer)
-  Payload size     : 5,687 bytes
-  At 30 FPS needs  : 167 KB/s
+Prediction: 7
+Mean server inference: 0.010 ms
+Server p95 latency: 0.013 ms
+Mean round-trip time: 1.431 ms
+Round-trip p95 latency: 1.729 ms
+Mean overhead outside inference: 1.420 ms
+Request body size: 5,687 bytes
+Request bandwidth at 30 FPS: 167 KB/s
 ==================================================
-  RECORD THESE VALUES IN YOUR RESULTS TABLE
+Record these values in the results table

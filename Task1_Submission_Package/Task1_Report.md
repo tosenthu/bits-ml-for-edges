@@ -1,6 +1,6 @@
 # Lab Worksheet 1: MNIST Edge and Cloud Inference
 
-**Course:** Machine Learning on the Edge · **Student:** Senthil Kumar M R · **Student ID:** 2025cs05049 · **Experiment date:** 22 September 2026
+**Course:** Machine Learning on the Edge · **Student:** Senthil Kumar M R · **Student ID:** 2025cs05049 · **Experiment date:** 13 October 2026
 
 ## Aim
 
@@ -31,7 +31,7 @@ The source files in the package have clear names. They follow the same steps as 
 4. `cloud_inference_server.py` starts the web service; `cloud_inference_client.py` sends the image to it.
 5. `edge_cloud_results_comparator.py` runs the local and server tests and compares them.
 
-The saved terminal logs and measurements are from the original worksheet run, so they still show the worksheet's original file names. I cleaned up the source names and variable names after that run. I did not repeat the full timing test after the clean-up. I did check that the updated server accepts a valid image and rejects pixel values outside the expected range.
+I ran all the programs again on 13 October 2026 after updating the source file names. The logs in this package are from this run. I also checked that local inference still worked after stopping the web server.
 
 The server and client ran on the same MacBook using `localhost` (this computer). So this is a local web-service test, not a test over the internet or to a real cloud server.
 
@@ -59,11 +59,11 @@ The model learned from 60,000 images and was checked using 10,000 separate test 
 
 | Training check | Result |
 |---|---:|
-| Accuracy on training images at the end | 97.90% |
-| Accuracy on validation images | 98.27% |
-| Accuracy on the separate test set | **97.85%** |
-| Training loss | 0.0688 |
-| Validation loss | 0.0631 |
+| Accuracy on training images at the end | 98.19% |
+| Accuracy on validation images | 98.38% |
+| Accuracy on the separate test set | **97.89%** |
+| Training loss | 0.0593 |
+| Validation loss | 0.0657 |
 
 The model correctly classified most test images. The test accuracy is close to the training accuracy, so this run does not show a large difference between the images used for learning and the separate test images. The training program does not fix a random seed, so training again can give slightly different results. The saved example image was the first test image. Its correct label was 7.
 
@@ -76,7 +76,7 @@ The converted model still accepts and returns `float32` values, so it is not a f
 | File or folder | Size |
 |---|---:|
 | Trained Keras model, `mnist_model.keras` | 637,507 bytes (622.6 KiB) |
-| Exported inference SavedModel folder | 452,678 bytes (442.1 KiB) |
+| Exported inference SavedModel folder | 452,677 bytes (442.1 KiB) |
 | TensorFlow Lite model, `model.tflite` | 55,960 bytes (54.6 KiB) |
 
 The worksheet asks for the size of a SavedModel folder. The training program saves a `.keras` file, so I also exported that same trained model to a SavedModel folder. I did not train the model again for this export.
@@ -91,12 +91,12 @@ The local program loaded the TensorFlow Lite model, made one warm-up prediction,
 |---|---:|
 | Correct digit | 7 |
 | Predicted digit | 7 |
-| Confidence score | 0.9996 |
+| Confidence score | 0.9999 |
 | Average time for one prediction | 0.006 ms |
 | Middle value (median) | 0.006 ms |
-| 95th-percentile time | 0.007 ms |
-| Longest time in this test | 0.009 ms |
-| Throughput shown by the program | 161,335 predictions per second |
+| 95th-percentile time | 0.006 ms |
+| Longest time in this test | 0.010 ms |
+| Throughput shown by the program | 170,394 predictions per second |
 
 The model predicted the saved image correctly. Its confidence score is close to 1, which means it was very sure about this prediction. The mean is the average time over all 100 predictions. The 95th percentile means that 95 out of the 100 measured times were at or below that value. These times cover model prediction only; they do not include taking a photo, preparing the image, or showing the result on a screen.
 
@@ -109,11 +109,11 @@ The server loaded the same TensorFlow Lite model. The client sent the same image
 | Result | Measured value |
 |---|---:|
 | Predicted digit | 7 |
-| Average time spent by the model on the server | 0.012 ms |
-| Server 95th-percentile time | 0.016 ms |
-| Average time for the full request and response | 1.646 ms |
-| 95th-percentile full request time | 2.006 ms |
-| Average time outside the model prediction | 1.634 ms |
+| Average time spent by the model on the server | 0.010 ms |
+| Server 95th-percentile time | 0.013 ms |
+| Average time for the full request and response | 1.431 ms |
+| 95th-percentile full request time | 1.729 ms |
+| Average time outside the model prediction | 1.420 ms |
 | JSON request body size | 5,687 bytes |
 | Request data rate at 30 images per second | 166.6 KiB/s (about 167 KB/s) |
 
@@ -126,15 +126,15 @@ The comparison program measured local inference and the full request to the serv
 | Measurement | Value | Needs a network? | What it means |
 |---|---:|---|---|
 | Average local prediction time | 0.007 ms | No | Model runs on this computer |
-| Average server model time | 0.012 ms | Server connection | Time spent on the server's model calculation |
-| Average full server request time | 1.502 ms | Yes | Sending the request and receiving its answer over localhost |
-| Difference between full server time and local time | 1.495 ms | — | Extra time in this comparison run |
-| Speedup printed by the comparison program | 226.8× | — | Uses more exact times than the rounded values shown above |
-| Throughput in the combined run | 151,001 predictions/s | 666 requests/s | Calculated from average latency |
+| Average server model time (separate cloud test) | 0.010 ms | Server connection | Time spent on the server's model calculation |
+| Average full server request time | 1.510 ms | Yes | Sending the request and receiving its answer over localhost |
+| Difference between full server time and local time | 1.503 ms | — | Based on the displayed mean values in this comparison run |
+| Speedup printed by the comparison program | 229.5× | — | Uses more exact times than the rounded values shown above |
+| Throughput in the combined run | 151,957 predictions/s | 662 requests/s | Calculated from average latency |
 | JSON request body per image | 5,687 bytes | — | Text data sent for one request, before network overhead |
 | Do local and server predictions match? | Yes | — | Both predicted digit 7 |
 
-The comparison run and the separate cloud run gave different average times because they were measured at different times on a shared computer. Short measurements can change slightly due to other work happening on the computer. A supplementary timing check retained the exact timing samples and gave an edge time of 0.006678 ms and a round-trip time of 1.430055 ms, or about 214.14 times faster for edge inference in that run.
+The comparison run and the separate cloud run gave different average times because they were measured at different times on a shared computer. Short measurements can change slightly due to other work happening on the computer. A supplementary timing check retained the exact timing samples and gave an edge time of 0.006028 ms and a round-trip time of 1.420754 ms, or about 235.68 times faster for edge inference in that run.
 
 The main result is that local prediction was faster in these tests and did not need to send the image to a server. The cloud-style test still ran on this same laptop, so the results cannot tell us how fast a real remote cloud service would be.
 
@@ -142,7 +142,7 @@ The main result is that local prediction was faster in these tests and did not n
 
 ### R1 — Latency and real-time use
 
-At 600 parts per minute, one part arrives every 100 milliseconds. The measured local time (0.007 ms) and the full request time to the local server (1.502 ms) are both below 100 ms. However, the server test used `localhost`, so it does not include real internet delay. For a vehicle that must react within 10 milliseconds to avoid a person, it is safer to make the urgent decision inside the vehicle. The cloud can still help with work that is not urgent, such as later analysis or model updates.
+At 600 parts per minute, one part arrives every 100 milliseconds. The measured local time (0.007 ms) and the full request time to the local server (1.510 ms) are both below 100 ms. However, the server test used `localhost`, so it does not include real internet delay. For a vehicle that must react within 10 milliseconds to avoid a person, it is safer to make the urgent decision inside the vehicle. The cloud can still help with work that is not urgent, such as later analysis or model updates.
 
 ### R2 — Privacy and data protection
 
@@ -180,8 +180,8 @@ When the server was stopped, the recorded client run could not connect and asked
 - The request size does not include the response or network overhead.
 - The training program does not fix a random seed, so a new training run may give slightly different results.
 - This run did not measure accuracy across all 10,000 test images using the converted TensorFlow Lite model.
-- The full benchmark was not repeated after the source files were renamed and cleaned up; the reported timing values are from the saved run logs.
+- Timing values can change slightly between runs because other work on the computer can affect these short measurements.
 
 ## Supporting files
 
-The package includes the trained Keras model, the TensorFlow Lite model, the exported SavedModel folder, the saved test image, a results file, and the original run logs. The logs may contain control characters from the terminal's progress display. They have been kept as captured and support the values in this report.
+The package includes the trained Keras model, the TensorFlow Lite model, the exported SavedModel folder, the saved test image, a results file, and logs from the 13 October 2026 run. The training log may contain control characters from the terminal's progress display. It has been kept as captured and supports the values in this report.

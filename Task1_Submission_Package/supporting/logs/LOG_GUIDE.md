@@ -1,6 +1,6 @@
 # Log guide
 
-These files are the terminal output saved during the Task 1 experiment. They use the worksheet's original script names because the source files were renamed later.
+These files contain terminal output from the Task 1 run on 13 October 2026. The source code now uses clear file names that describe each program's action.
 
 | File | What it shows |
 |---|---|
@@ -17,4 +17,4 @@ These files are the terminal output saved during the Task 1 experiment. They use
 
 `precision-comparison-samples.json` contains the individual timing values from 100 runs, along with their summary. It lets the reported averages and percentiles be checked.
 
-The terminal logs have been kept as captured. Some may show colours, overwritten progress lines, or other control characters. The tables in `Task1_Report.md` give the same results in a cleaner form.
+The terminal logs have been kept as captured. The training log may show colours, overwritten progress lines, or other control characters. The tables in `Task1_Report.md` give the same results in a cleaner form.

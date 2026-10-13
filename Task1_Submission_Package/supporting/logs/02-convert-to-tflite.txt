@@ -1,19 +1,33 @@
-^DLoaded model from  mnist_model/
-Saved artifact at '/var/folders/pq/yr2sf2950c72hhwx588w71hm0000gn/T/tmpkmq6a0d1'. The following endpoints are available:
+/Users/smanguzh/.matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /var/folders/pq/yr2sf2950c72hhwx588w71hm0000gn/T/matplotlib-9vpjvc3_ because there was an issue with the default path (/Users/smanguzh/.matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Matplotlib is building the font cache; this may take a moment.
+Saved artifact at '/var/folders/pq/yr2sf2950c72hhwx588w71hm0000gn/T/tmpa_luxx57'. The following endpoints are available:
 
 * Endpoint 'serve'
   args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 28, 28, 1), dtype=tf.float32, name='input_layer')
 Output Type:
   TensorSpec(shape=(None, 10), dtype=tf.float32, name=None)
 Captures:
-  4782405968: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  4782405584: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  4800116880: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  4800117648: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  4800117456: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  4800115920: TensorSpec(shape=(), dtype=tf.resource, name=None)
-
-✔ Conversion complete!
-   SavedModel size  : 622.6 KB
-   TFLite size      : 54.6 KB
-   Compression      : 11.4×
+  4823699472: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4823699280: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4839854288: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4839855056: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4839854864: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4839854096: TensorSpec(shape=(), dtype=tf.resource, name=None)
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1791910971.194037 26101344 tf_tfl_flatbuffer_helpers.cc:364] Ignored output_format.
+W0000 00:00:1791910971.194072 26101344 tf_tfl_flatbuffer_helpers.cc:367] Ignored drop_control_dependency.
+I0000 00:00:1791910971.194733 26101344 reader.cc:83] Reading SavedModel from: /var/folders/pq/yr2sf2950c72hhwx588w71hm0000gn/T/tmpa_luxx57
+I0000 00:00:1791910971.194952 26101344 reader.cc:52] Reading meta graph with tags { serve }
+I0000 00:00:1791910971.194961 26101344 reader.cc:147] Reading SavedModel debug info (if present) from: /var/folders/pq/yr2sf2950c72hhwx588w71hm0000gn/T/tmpa_luxx57
+I0000 00:00:1791910971.196519 26101344 mlir_graph_optimization_pass.cc:437] MLIR V1 optimization pass is not enabled
+I0000 00:00:1791910971.196758 26101344 loader.cc:236] Restoring SavedModel bundle.
+W0000 00:00:1791910971.197624 26101344 cpu_utils.cc:145] Failed to get CPU frequency: 0 Hz
+W0000 00:00:1791910971.207788 26101344 op_level_cost_estimator.cc:743] Invalid device specifications for CPU: goo.gle/debugonly   type: "CPU" model: "0" num_cores: 12 environment { key: "cpu_instruction_set" value: "ARM NEON" } environment { key: "eigen" value: "3.5.0" } l1_cache_size: 16384 l2_cache_size: 524288 l3_cache_size: 524288 memory_size: 268435456
+I0000 00:00:1791910971.213459 26101344 loader.cc:220] Running initialization op on SavedModel bundle at path: /var/folders/pq/yr2sf2950c72hhwx588w71hm0000gn/T/tmpa_luxx57
+I0000 00:00:1791910971.216177 26101344 loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 21445 microseconds.
+I0000 00:00:1791910971.237046 26101344 dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+Conversion complete
+Keras model size: 622.6 KB
+TFLite model size: 54.6 KB
+Keras-to-TFLite size ratio: 11.4x

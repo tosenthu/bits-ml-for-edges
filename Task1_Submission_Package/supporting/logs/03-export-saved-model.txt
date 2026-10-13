@@ -1,15 +1,18 @@
-^DSaved artifact at 'mnist_saved_model'. The following endpoints are available:
+/Users/smanguzh/.matplotlib is not a writable directory
+Matplotlib created a temporary cache directory at /var/folders/pq/yr2sf2950c72hhwx588w71hm0000gn/T/matplotlib-sillw2cj because there was an issue with the default path (/Users/smanguzh/.matplotlib); it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+Matplotlib is building the font cache; this may take a moment.
+Saved artifact at 'mnist_saved_model'. The following endpoints are available:
 
 * Endpoint 'serve'
   args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 28, 28, 1), dtype=tf.float32, name='input_layer')
 Output Type:
   TensorSpec(shape=(None, 10), dtype=tf.float32, name=None)
 Captures:
-  4811356688: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  4811356304: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  4829198672: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  4829199440: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  4829199248: TensorSpec(shape=(), dtype=tf.resource, name=None)
-  4829197712: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4828287184: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4828286992: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4844458384: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4844459152: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4844458960: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  4844458192: TensorSpec(shape=(), dtype=tf.resource, name=None)
 SavedModel directory: mnist_saved_model
-SavedModel logical size: 452,678 bytes (442.1 KB)
+SavedModel logical size: 452,677 bytes (442.1 KB)
